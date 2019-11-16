@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  display_dots: boolean = false;
 
   bars_number: number = 100;
   delay: number = 10;
@@ -141,14 +142,8 @@ export class HomePage {
       this.secondPivot = this.tab[pivotIndex];
       if (arr[i] < pivotValue) {
         await this.swap(arr, i, pivotIndex++);
-        // let tmp = arr[i];
-        // arr[i] = arr[pivotIndex];
-        // arr[pivotIndex] = tmp;
       }
     }
-    // let tmp = arr[i];
-    // arr[i] = arr[pivotIndex];
-    // arr[pivotIndex] = tmp;
     await this.swap(arr, pivotIndex, end);
     return pivotIndex;
   }
@@ -170,7 +165,7 @@ export class HomePage {
       await this.merge(arr, left, middle, right);
     }
   }
-  async merge(arr, l, m, r) { // could have done simpler but did this way for the sake of visualization
+  async merge(arr, l, m, r) { 
     if (this.stop) return;
     let i, j, k;
     let n1: number  = m - l + 1;
@@ -205,14 +200,16 @@ export class HomePage {
       arr[k++] = R[j++];
     }
   }
-  //* Merge Sort END
+  // * Merge Sort END
 
-  //* Merge Sort2
+  // * Merge Sort2 (not actually magic just done in the background)
   async launchMergeSort2() {
     await this.mergeSort2(this.tab);
   }
   async mergeSort2(arr) {
     if (arr.length > 1) {
+      let i, j, k;
+      i = j = k = 0;
       let mid = Math.floor(arr.length / 2);
       let L = arr.slice(0, mid);
       let R = arr.slice(mid);
@@ -220,8 +217,6 @@ export class HomePage {
       this.mergeSort2(L);
       this.mergeSort2(R);
 
-      let i, j, k;
-      i = j = k =0;
       while (i < L.length && j < R.length && !this.stop) {
         await this.sleep(this.delay);
         this.currentPivot = this.tab[k];
@@ -243,7 +238,7 @@ export class HomePage {
       }
     }
   }
-  //* Merge Sort2 END
+  // * Merge Sort2 END
 
   async swap(arr, a, b) {
     await this.sleep(this.delay);
@@ -254,5 +249,9 @@ export class HomePage {
   stopSort() {
     this.stop = true;
     setTimeout(() => this.stop = false, 100);
+  }
+
+  toggleDots() {
+    this.display_dots = !this.display_dots;
   }
 }
