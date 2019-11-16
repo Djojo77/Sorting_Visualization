@@ -1,0 +1,69 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<div class="main_content">
+  <div class="tab_container">
+    <div *ngFor="let value of tab"
+      class="bars"
+      [style.height]="(value * 100 / tab.length) + '%'"
+      [style.width]="(100 / tab.length) + '%'"
+      [style.backgroundColor]="(currentPivot == value)
+        ? 'red' : (secondPivot == value)
+          ? 'blue' : (value > i_max || value < i_min)
+            ? 'lightgreen' : 'white'
+      "
+      >
+    </div>
+  </div>
+
+  <div>
+    <ion-button (click)="launch('bubble')">
+      Bubble Sort
+    </ion-button>
+    <ion-button (click)="launch('shaker')">
+      Shaker Sort
+    </ion-button>
+    <ion-button (click)="launch('quick')">
+      Quick Sort
+    </ion-button>
+    <ion-button (click)="launch('merge')">
+      Merge Sort
+    </ion-button>
+    <ion-button (click)="launch('merge2')">
+      Magic merge Sort
+    </ion-button>
+  </div>
+
+  <div>
+    <div>
+      <label for="bars_number">
+        Bars:
+        <input id="bars_number" type="number"
+          [(ngModel)]="bars_number"
+          (ngModelChange)="fillTab()"
+        >
+      </label>
+    </div>
+    <div>
+      <label for="delay">
+        Delay:
+        <input id="delay" type="number" [(ngModel)]="delay">
+      </label>
+    </div>
+  </div>
+
+  <div>
+    <ion-button (click)="fillTab()">
+      Reset Table
+    </ion-button>
+    <ion-button (click)="stopSort()">
+      Stop
+    </ion-button>
+  </div>
+
+</div>
