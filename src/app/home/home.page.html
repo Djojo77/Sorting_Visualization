@@ -7,22 +7,22 @@
 </ion-header> -->
 
 <div class="main_content">
-  <div class="tab_container">
+  <div class="tab_container" #tab_container>
     <div *ngFor="let value of tab"
       class="bars"
       [style.height]="(value * 100 / tab.length) + '%'"
       [style.width]="(100 / tab.length) + '%'"
       [style.border]="(display_dots) ? 'none' : '0.1px solid lightslategray'"
       [style.backgroundColor]="(display_dots)
-        ? 'black' : (currentPivot == value)
+        ? 'transparent' : (currentPivot == value)
           ? 'red' : (secondPivot == value)
             ? 'blue' : (value > i_max || value <= i_min)
               ? 'lightgreen' : 'white'
       "
     >
-      <div *ngIf="display_dots"
+      <div *ngIf="display_dots" 
         class="squares" 
-        [style.height]="(500 / tab.length) + 'px'"
+        [style.height]="(windowWidth / tab.length) + 'px'"
         [style.backgroundColor]="(currentPivot == value)
           ? 'red' : (secondPivot == value)
             ? 'blue' : (value > i_max || value <= i_min)

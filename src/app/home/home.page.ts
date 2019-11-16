@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+
+  windowWidth: number = 10;
   display_dots: boolean = false;
 
   bars_number: number = 100;
@@ -21,6 +23,14 @@ export class HomePage {
 
   constructor() {
     this.fillTab();
+  }
+  
+  ngAfterViewInit() {
+    this.windowWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      this.windowWidth = window.innerWidth;
+    })
+    console.log(this.windowWidth);
   }
 
   sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
