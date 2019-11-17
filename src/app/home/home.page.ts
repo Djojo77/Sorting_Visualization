@@ -155,9 +155,9 @@ export class HomePage {
     let pivotValue: number = arr[end];
     let i: number;
 
+    this.currentPivot = pivotValue;
     for (i = start; i < end && !this.stop; i++) {
-      this.currentPivot = this.tab[i];
-      this.secondPivot = this.tab[pivotIndex];
+      this.secondPivot = arr[pivotIndex];
       if (arr[i] < pivotValue) {
         await this.swap(arr, i, pivotIndex++);
       }
@@ -198,7 +198,7 @@ export class HomePage {
     i = j = 0;
     k = l;
     while (i < n1 && j < n2 && !this.stop) {
-      await this.sleep(this.delay);
+      if (this.delay) await this.sleep(this.delay);
       this.currentPivot = this.tab[k];
       if (L[i] <= R[j]) {
         this.secondPivot = this.tab[i];
@@ -235,7 +235,7 @@ export class HomePage {
       this.mergeSort2(R);
 
       while (i < L.length && j < R.length && !this.stop) {
-        await this.sleep(this.delay);
+        if (this.delay) await this.sleep(this.delay);
         this.currentPivot = this.tab[k];
         if (L[i] < R[j]) {
           this.secondPivot = this.tab[i];
@@ -330,7 +330,7 @@ export class HomePage {
         let j = i;
         this.currentPivot = tmp;
         while (j >= gap && this.tab[j-gap] > tmp && !this.stop) {
-          await this.sleep(this.delay);
+          if (this.delay) await this.sleep(this.delay);
           this.secondPivot = this.tab[j-gap];
           this.tab[j] = this.tab[j-gap];
           j -= gap;
@@ -344,7 +344,7 @@ export class HomePage {
   // * Shell Sort END
 
   async swap(arr, a, b) {
-    await this.sleep(this.delay);
+    if (this.delay) await this.sleep(this.delay);
     if (this.stop) return;
     let tmp: number = arr[a];
     arr[a] = arr[b];
