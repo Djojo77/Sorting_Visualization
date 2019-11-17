@@ -24,7 +24,7 @@ export class HomePage {
   constructor() {
     this.fillTab();
   }
-  
+
   ngAfterViewInit() {
     this.windowWidth = window.innerWidth;
     window.addEventListener('resize', () => {
@@ -33,9 +33,8 @@ export class HomePage {
     console.log(this.windowWidth);
   }
 
-  sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
   async launch(sort) {
+    this.stop = false;
     console.time()
     switch(sort) {
       case 'bubble':
@@ -53,15 +52,24 @@ export class HomePage {
       case 'merge2':
         await this.launchMergeSort2();
         break;
+      case 'heap':
+        await this.launchHeapSort();
+        break;
+      case 'shell':
+        await this.shellSort();
+        break;
+      case 'quickMerge':
+        await this.launchQuickMergeSort();
+        break;
       default:
         await this.bubbleSort();
     }
     console.timeEnd();
   }
 
-  fillTab() {
+  async fillTab() {
     this.stopSort();
-    let i, j, tmp;
+    let i: number, j: number, tmp: number;
     let tab: number[] = [];
     for (i = 1; i <= this.bars_number; i++)
       tab.push(i);
@@ -167,7 +175,6 @@ export class HomePage {
     if (this.stop) return;
     if (left < right) {
       let middle: number = await Math.floor(left + (right - left)/2);
-
       await Promise.all([
         this.mergeSort(arr, left, middle),
         this.mergeSort(arr, middle+1, right)
@@ -175,7 +182,7 @@ export class HomePage {
       await this.merge(arr, left, middle, right);
     }
   }
-  async merge(arr, l, m, r) { 
+  async merge(arr, l, m, r) {
     if (this.stop) return;
     let i, j, k;
     let n1: number  = m - l + 1;
@@ -250,16 +257,104 @@ export class HomePage {
   }
   // * Merge Sort2 END
 
+  // * Quick Merge Sort
+  async launchQuickMergeSort() {
+    await this.quickMergeSort(this.tab, 0, this.tab.length-1);
+  }
+  async quickMergeSort(arr, left, right) {
+    if (this.stop) return;
+    if (left < right) {
+      let middle: number = await Math.floor(left + (right - left)/2);
+      if (right - left < 200) {
+        let index: number = await this.partition(arr, left, right);
+        await Promise.all([
+          this.quickMergeSort(arr, left, index-1),
+          this.quickMergeSort(arr, index+1, right)
+        ]);
+      } else {
+        await Promise.all([
+          this.quickMergeSort(arr, left, middle),
+          this.quickMergeSort(arr, middle+1, right)
+        ]);
+        await this.merge(arr, left, middle, right);
+      }
+    }
+  }
+  // * Quick Merge Sort END
+
+
+  // * Heap Sort
+  async launchHeapSort() {
+    await this.heapSort(this.tab);
+  }
+  async heapSort(arr) {
+    let n = arr.length;
+    let i;
+
+    for (i = n/2 - 1; i >= 0 && !this.stop; i--) // Build heap (rearrange array)
+      await this.heapify(arr, n, i);
+
+    this.currentPivot = arr[0];
+    for (i = n-1; i >= 0 && !this.stop; i--) {  // One by one extract an element from heap
+      this.secondPivot = arr[i];
+      await this.swap(arr, 0, i);       // Move current root to end
+      await this.heapify(arr, i, 0);    // call max this.heapify on the reduced heap
+    }
+  }
+  async heapify(arr, n, i) {
+    if (this.stop) return;
+    let largest = i; // Initialize largest as root
+    let l = 2*i + 1; // left = 2*i + 1
+    let r = 2*i + 2; // right = 2*i + 2
+    if (l < n && arr[l] > arr[largest])
+      largest = l;
+    if (r < n && arr[r] > arr[largest])
+      largest = r;
+
+    this.currentPivot = arr[i];
+    if (largest != i && !this.stop) {
+      this.secondPivot = arr[largest];
+      await this.swap(arr, i, largest);
+      await this.heapify(arr, n, largest);
+    }
+  }
+  // * Heap Sort END
+
+  // * Shell Sort
+  async shellSort() {
+    let n = this.tab.length;
+    let gap = n/2;
+    while (gap > 0 && !this.stop) {
+      for (let i = gap; i < n && !this.stop; i++) {
+        let tmp = this.tab[i];
+        let j = i;
+        this.currentPivot = tmp;
+        while (j >= gap && this.tab[j-gap] > tmp && !this.stop) {
+          await this.sleep(this.delay);
+          this.secondPivot = this.tab[j-gap];
+          this.tab[j] = this.tab[j-gap];
+          j -= gap;
+        }
+        this.secondPivot = this.tab[j];
+        this.tab[j] = tmp;
+      }
+      gap = Math.floor(gap / 2);
+    }
+  }
+  // * Shell Sort END
+
   async swap(arr, a, b) {
     await this.sleep(this.delay);
+    if (this.stop) return;
     let tmp: number = arr[a];
     arr[a] = arr[b];
     arr[b] = tmp;
   }
   stopSort() {
     this.stop = true;
-    setTimeout(() => this.stop = false, 100);
+    setTimeout(() => this.stop = false, 500);
   }
+  sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   toggleDots() {
     this.display_dots = !this.display_dots;

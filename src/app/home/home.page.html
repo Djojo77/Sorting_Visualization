@@ -20,13 +20,13 @@
               ? 'lightgreen' : 'white'
       "
     >
-      <div *ngIf="display_dots" 
-        class="squares" 
+      <div *ngIf="display_dots"
+        class="squares"
         [style.height]="(windowWidth / tab.length) + 'px'"
         [style.backgroundColor]="(currentPivot == value)
           ? 'red' : (secondPivot == value)
             ? 'blue' : (value > i_max || value <= i_min)
-              ? 'lightgreen' : 'white'
+              ? '#99ff00' : 'white'
         "
       ></div>
     </div>
@@ -46,7 +46,16 @@
       Merge Sort 🤞🔗🖇
     </ion-button>
     <ion-button (click)="launch('merge2')">
-      Magic merge Sort 🧙‍♂️✨🤞
+      Magic Merge Sort 🧙‍♂️✨🤞
+    </ion-button>
+    <ion-button (click)="launch('heap')">
+      Heap Sort 🌊🛸🦾
+    </ion-button>
+    <ion-button (click)="launch('shell')">
+      Shell Sort 🐚⛱
+    </ion-button>
+    <ion-button (click)="launch('quickMerge')">
+      Quick Merge Sort 🤞🌪🌀
     </ion-button>
   </div>
 
@@ -69,15 +78,15 @@
   </div>
 
   <div>
-    <ion-button (click)="fillTab()">
+    <ion-button color="primary" (click)="fillTab()">
       Reset Table
     </ion-button>
     <ion-button color="danger" (click)="stopSort()">
-      Stop        
+      Stop
       <ion-ripple-effect type="bounded"></ion-ripple-effect>
     </ion-button>
     <ion-button color="secondary" (click)="toggleDots()">
-      Display Dots        
+      Display {{(display_dots) ? 'Bars' : 'Dots'}}
     </ion-button>
   </div>
 
