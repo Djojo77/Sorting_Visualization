@@ -65,6 +65,7 @@ export class HomePage {
         await this.bubbleSort();
     }
     console.timeEnd();
+    this.validate_sort();
   }
 
   async fillTab() {
@@ -85,6 +86,14 @@ export class HomePage {
     this.i_min = 0;
     this.tab = tab;
     console.log('new tab', tab);
+  }
+
+  async validate_sort() {
+    for (let i = 0; i <= this.tab.length; i++) {
+      if (this.delay) await this.sleep(this.delay);
+      if (this.tab[i] < i) break;
+      this.i_min = i;
+    }
   }
 
   //* Bubble Sort
@@ -236,21 +245,23 @@ export class HomePage {
 
       while (i < L.length && j < R.length && !this.stop) {
         if (this.delay) await this.sleep(this.delay);
-        this.currentPivot = this.tab[k];
+        this.currentPivot = arr[k];
         if (L[i] < R[j]) {
-          this.secondPivot = this.tab[i];
+          this.secondPivot = arr[i];
           arr[k++] = L[i++];
         } else {
-          this.secondPivot = this.tab[j];
+          this.secondPivot = arr[j];
           arr[k++] = R[j++];
         }
       }
       while (i < L.length && !this.stop) {
-        this.secondPivot = this.tab[i];
+        this.currentPivot = arr[k];
+        this.secondPivot = arr[i];
         arr[k++] = L[i++];
       }
       while (j < R.length && !this.stop) {
-        this.secondPivot = this.tab[j];
+        this.currentPivot = arr[k];
+        this.secondPivot = arr[j];
         arr[k++] = R[j++];
       }
     }
