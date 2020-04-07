@@ -45,11 +45,21 @@
     <ion-button (click)="launch('heap')">
       Heap Sort 🌊🛸🦾
     </ion-button>
-    <ion-button (click)="launch('quick')">
-      Quick Sort 🚴💨🎰
+    <ion-button
+      [color]="isAsync ? 'warning' : 'primary'"
+      (click)="launch('quick')"
+      >
+      <p [class]="isAsync ? 'async-text' : ''">
+        Quick Sort 🚴💨🎰
+      </p>
     </ion-button>
-    <ion-button (click)="launch('merge')">
-      Merge Sort 🙏🔗🖇
+    <ion-button
+      [color]="isAsync ? 'warning' : 'primary'"
+      (click)="launch('merge')"
+      >
+      <p [class]="isAsync ? 'async-text' : ''">
+        Merge Sort 🙏🔗🖇
+      </p>
     </ion-button>
     <ion-button (click)="launch('merge2')">
       Magic Merge Sort 🧙‍♂️✨🤞
@@ -85,9 +95,26 @@
       Stop
       <ion-ripple-effect type="bounded"></ion-ripple-effect>
     </ion-button>
-    <ion-button color="secondary" (click)="toggleDots()">
+    <ion-button
+      [color]="display_dots ? 'secondary' : 'tertiary'"
+      (click)="display_dots = !display_dots"
+    >
       Display {{(display_dots) ? 'Bars' : 'Dots'}}
     </ion-button>
+    <ion-button
+      [color]="isAsync ? 'warning' : 'tertiary'"
+      (click)="isAsync = !isAsync"
+    >
+      <p [class]="isAsync ? 'async-text' : ''">
+        Go Async 🔀🔱
+      </p>
+    </ion-button>
+  </div>
+
+  <div class="small-alerte-div">
+    <p *ngIf="isAsync">
+      🔥🔋 async mode activated, more memory consumption ahead ! 🌡🔥
+    </p>
   </div>
 
 </div>

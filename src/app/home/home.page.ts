@@ -21,6 +21,8 @@ export class HomePage {
 
   stop: boolean = false;
 
+  isAsync: boolean = false;
+
   constructor() {
     this.fillTab();
   }
@@ -153,10 +155,17 @@ export class HomePage {
 
     let index: number = await this.partition(arr, start, end);
 
-    await Promise.all([
-      this.quickSort(arr, start, index-1),
-      this.quickSort(arr, index+1, end)
-    ]);
+    if (this.isAsync) {
+      await Promise.all([
+        this.quickSort(arr, start, index-1),
+        this.quickSort(arr, index+1, end)
+      ]);
+    } else {
+      // * to limited memory consumption
+      await this.quickSort(arr, start, index-1);
+      await this.quickSort(arr, index+1, end);
+    }
+
   }
   async partition(arr, start, end) {
     if (this.stop) return;
@@ -184,10 +193,18 @@ export class HomePage {
     if (this.stop) return;
     if (left < right) {
       let middle: number = await Math.floor(left + (right - left)/2);
-      await Promise.all([
-        this.mergeSort(arr, left, middle),
-        this.mergeSort(arr, middle+1, right)
-      ]);
+
+      if (this.isAsync) {
+        await Promise.all([
+          this.mergeSort(arr, left, middle),
+          this.mergeSort(arr, middle+1, right)
+        ]);
+      } else {
+        // * to limit memory consumption
+        await this.mergeSort(arr, left, middle);
+        await this.mergeSort(arr, middle+1, right);
+      }
+
       await this.merge(arr, left, middle, right);
     }
   }
@@ -367,7 +384,4 @@ export class HomePage {
   }
   sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  toggleDots() {
-    this.display_dots = !this.display_dots;
-  }
 }
